@@ -5,7 +5,7 @@ const scryptAsync = promisify(scrypt);
 
 export class Password {
   static async hashPassword(password: string) {
-    const salt = randomBytes(12).toString("hex");
+    const salt = randomBytes(16).toString("hex");
     const hash = (await scryptAsync(password, salt, 64)) as Buffer;
 
     return `${hash.toString("hex")}.${salt}`;
@@ -22,6 +22,6 @@ export class Password {
       64
     )) as Buffer;
 
-    return providedPassword === hash;
+    return hash === providedPasswordHash.toString("hex");
   }
 }

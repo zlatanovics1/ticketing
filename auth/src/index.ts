@@ -7,8 +7,17 @@ import { currentUserRouter } from "./routes/currentUser";
 import { signupRouter } from "./routes/signup";
 import { errorHandler } from "./middlewares/errorHandler";
 import { NotFoundError } from "./errors/notFoundError";
+import mongoose from "mongoose";
 
 const app = express();
+
+(async function () {
+  try {
+    await mongoose.connect("mongodb://auth-mongo-srv:27017/auth");
+  } catch (err) {
+    console.error(err);
+  }
+})();
 
 app.use(signinRouter);
 app.use(signoutRouter);
