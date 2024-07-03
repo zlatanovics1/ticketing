@@ -32,9 +32,10 @@ router.post(
 
     req.session = {
       jwt: token,
+      currentUser: user,
     };
 
-    res.status(201).json({
+    res.status(201).send({
       status: "success",
       data: user,
     });

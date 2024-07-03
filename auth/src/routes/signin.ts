@@ -1,5 +1,10 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
+import { validateRequest } from "../middlewares/validateRequest";
+import { User } from "../models/user";
+import { BadRequestError } from "../errors/badRequestError";
+import { Password } from "../services/password";
 
 const router = express.Router();
 
@@ -7,15 +12,28 @@ router.post(
   "/api/v1/signin",
   [
     body("email").isEmail().withMessage("Please enter valid email address"),
-    body("password")
-      .trim()
-      .isLength({ min: 8, max: 20 })
-      .withMessage("Password must be between 4 and 20 characters"),
+    body("password").trim().notEmpty().withMessage("Please provide a password"),
   ],
-  (req, res) => {
-    const errors = validationResult(req);
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
-    res.send({});
+    if (!user) throw new BadRequestError("Invalid credentials");
+
+    if (!Password.comparePassword(user.password, password))
+      throw new BadRequestError("Invalid credentials");
+
+    const token = jwt.sign({ id: user.id, email }, process.env.JWT_SECRET!);
+
+    req.session = {
+      jwt: token,
+      currentUser: user,
+    };
+    res.status(200).send({
+      status: "success",
+      data: user,
+    });
   }
 );
 
