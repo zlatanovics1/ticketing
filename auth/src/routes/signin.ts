@@ -1,5 +1,6 @@
-import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import express from "express";
+import { Request, Response } from "express";
+import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { validateRequest } from "../middlewares/validateRequest";
 import { User } from "../models/user";
@@ -9,7 +10,7 @@ import { Password } from "../services/password";
 const router = express.Router();
 
 router.post(
-  "/api/v1/signin",
+  "/api/users/signin",
   [
     body("email").isEmail().withMessage("Please enter valid email address"),
     body("password").trim().notEmpty().withMessage("Please provide a password"),

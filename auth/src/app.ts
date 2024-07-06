@@ -24,7 +24,7 @@ app.use(
   })
 );
 
-app.all("*", () => {
+app.use("*", () => {
   throw new NotFoundError();
 });
 

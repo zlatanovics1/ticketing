@@ -9,7 +9,7 @@ import { BadRequestError } from "../errors/badRequestError";
 const router = express.Router();
 
 router.post(
-  "/api/v1/signup",
+  "/api/users/signup",
   [
     body("email").isEmail().withMessage("Please enter valid email address"),
     body("password")

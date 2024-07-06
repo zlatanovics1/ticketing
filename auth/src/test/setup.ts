@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 import { MongoMemoryServer } from "mongodb-memory-server";
 
+declare global {
+  var signin: () => Promise<string[]>;
+}
+
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
