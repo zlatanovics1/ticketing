@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets
+spec:
+  selector:
+    matchLabels:
+      app: tickets
+  template:
+    metadata:
+      labels:
+        app: tickets
+    spec:
+      containers:
+        - name: tickets
+          image: zlatanovics/tickets
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+  labels:
+    app: tickets
+spec:
+  selector:
+    app: tickets
+  ports:
+    - port: 8001
+      targetPort: 8001
+      protocol: TCP
+      name: tickets
