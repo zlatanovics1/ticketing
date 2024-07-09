@@ -6,3 +6,11 @@ it("has route handler for ticketing service: /api/tickets", async () => {
 
   expect(response.status).not.toEqual(404);
 });
+
+it("only authenticated users can access tickets service", async () => {});
+
+it("returns an error when invalid title is provided", async () => {});
+
+it("returns an error when invalid price is provided", async () => {});
+
+it("creates a new ticket with valid input", async () => {});
