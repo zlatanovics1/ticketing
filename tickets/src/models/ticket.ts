@@ -11,7 +11,7 @@ interface TicketDoc extends mongoose.Document {
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
-  build(attrs: TicketAttrs): void;
+  build(attrs: TicketAttrs): TicketDoc;
 }
 
 const TicketSchema = new mongoose.Schema(
@@ -35,3 +35,11 @@ const TicketSchema = new mongoose.Schema(
     },
   }
 );
+
+TicketSchema.statics.build = (attrs: TicketAttrs) => {
+  return new Ticket(attrs);
+};
+
+const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", TicketSchema);
+
+export { Ticket };

@@ -8,8 +8,13 @@ export function errorHandler(
   next: NextFunction
 ) {
   if (err instanceof CustomError) {
-    return res.status(err.statusCode).send(err.serializeError());
+    return res.status(err.statusCode).send({
+      status: `${err.statusCode}`.startsWith("4") ? "fail" : "error",
+      data: err.serializeError(),
+    });
   }
 
-  res.status(500).send([{ message: "Something went wrong" }]);
+  res
+    .status(500)
+    .send({ status: "error", data: [{ message: "Something went wrong" }] });
 }

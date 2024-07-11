@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { requireAuth } from "../middlewares/requireAuth";
 import { validateRequest } from "../middlewares/validateRequest";
+import { Ticket } from "../models/ticket";
+import { BadRequestError } from "../errors/badRequestError";
 
 const router = express.Router();
 
@@ -16,5 +18,18 @@ router
         .withMessage("Ticket must have a price greater than 0"),
     ],
     validateRequest,
-    async (req: Request, res: Response) => {}
+    async (req: Request, res: Response) => {
+      const { title, price } = req.body;
+      const exists = await Ticket.findOne({ title });
+
+      if (exists) throw new BadRequestError("Ticket title already in use");
+
+      const ticket = Ticket.build({ title, price });
+      await ticket.save();
+
+      res.status(201).send({
+        status: "success",
+        data: ticket,
+      });
+    }
   );
