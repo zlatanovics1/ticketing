@@ -4,6 +4,7 @@ import { requireAuth } from "../middlewares/requireAuth";
 import { validateRequest } from "../middlewares/validateRequest";
 import { Ticket } from "../models/ticket";
 import { BadRequestError } from "../errors/badRequestError";
+import { NotFoundError } from "../errors/notFoundError";
 
 const router = express.Router();
 
@@ -33,3 +34,13 @@ router
       });
     }
   );
+
+router.route("/api/tickets/:id").get(async (req: Request, res: Response) => {
+  const ticket = await Ticket.findById(req.body.id);
+  if (!ticket) throw new NotFoundError();
+
+  res.status(200).send({
+    status: "success",
+    data: ticket,
+  });
+});
