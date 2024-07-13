@@ -12,6 +12,14 @@ const router = express.Router();
 
 router
   .route("/api/tickets")
+  .get(async (req: Request, res: Response) => {
+    const tickets = await Ticket.find();
+
+    res.status(200).send({
+      status: "success",
+      data: tickets,
+    });
+  })
   .post(
     currentUser,
     requireAuth,
