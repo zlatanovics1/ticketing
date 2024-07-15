@@ -1,6 +1,2 @@
 // nats config
-
-interface Event {
-  subject: string;
-  data: any;
-}
+import { Message, Stan } from "node-nats-streaming";
